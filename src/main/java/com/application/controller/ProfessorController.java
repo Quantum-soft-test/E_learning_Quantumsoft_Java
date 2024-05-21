@@ -114,34 +114,15 @@ public class ProfessorController
 	public ResponseEntity<?> addNewChapters(@RequestBody Chapter chapter) throws Exception
 	{
 		boolean courseExists = chapterService.doesCourseExist(chapter.getCoursename());
-
-		if(chapter.getCoursename().equals(chapterService.fetchByCoursename(chapter.getCoursename()))){
-			Chapter chapterObj = chapterService.addNewChapter(chapter);
-			return new ResponseEntity<>(chapterObj,HttpStatus.OK);
-		}
+		Chapter chapterObj = chapterService.addNewChapter(chapter);
+		return new ResponseEntity<>(chapterObj,HttpStatus.OK);
+//		if(chapter.getCoursename().equals(chapterService.fetchByCoursename(chapter.getCoursename()))){
+//			Chapter chapterObj = chapterService.addNewChapter(chapter);
+//			return new ResponseEntity<>(chapterObj,HttpStatus.OK);
+//		}
 //		Chapter chapterObj = null;
 //		chapterObj = chapterService.addNewChapter(chapter);
-		return new ResponseEntity<String>("course not found",HttpStatus.NO_CONTENT);
-//		boolean courseExists = chapterService.doesCourseExist(chapter.getCoursename());
-//
-//		if (courseExists) {
-//			Chapter chapterObj = chapterService.addNewChapter(chapter);
-//			return new ResponseEntity<>(chapterObj, HttpStatus.OK);
-//		} else {
-//			return new ResponseEntity<String>("Course not found", HttpStatus.NO_CONTENT);
-//		}
-//		Course existingCourse = courseService.fetchCourseByCoursename(chapter.getCoursename());
-//
-//		if (existingCourse != null) {
-//			// Course already exists, use the existing course for adding the chapter
-//			existingCourse.getChapterList().add(chapter);
-//			courseService.saveCourse(existingCourse);
-//			//Chapter chapterObj = chapterService.addNewChapter(chapter);
-//			return new ResponseEntity<>(existingCourse, HttpStatus.OK);
-//		} else {
-//			return new ResponseEntity<String>("Course not found", HttpStatus.NO_CONTENT);
-//		}
-
+//		return new ResponseEntity<String>("course not found",HttpStatus.NO_CONTENT);
 
 	}
 	

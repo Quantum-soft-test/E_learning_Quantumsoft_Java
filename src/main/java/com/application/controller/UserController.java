@@ -267,13 +267,13 @@ public class UserController
 		{
 			Chapter obj1 = new Chapter();
 			obj1.setChapter1name("1");
-//			obj1.setChapter2name("2");
-//			obj1.setChapter3name("3");
-//			obj1.setChapter4name("4");
-//			obj1.setChapter5name("5");
-//			obj1.setChapter6name("6");
-//			obj1.setChapter7name("7");
-//			obj1.setChapter8name("8");
+			obj1.setChapter2name("2");
+			obj1.setChapter3name("3");
+			obj1.setChapter4name("4");
+			obj1.setChapter5name("5");
+			obj1.setChapter6name("6");
+			obj1.setChapter7name("7");
+			obj1.setChapter8name("8");
 			chapterLists.add(obj1);
 		}
 		return new ResponseEntity<List<Chapter>>(chapterLists, HttpStatus.OK);
