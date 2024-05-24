@@ -1,6 +1,8 @@
 package com.application.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -10,6 +12,9 @@ import com.application.model.User;
 import com.application.services.ProfessorService;
 import com.application.services.UserService;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 @RestController
 public class RegistrationController 
 {
@@ -18,27 +23,37 @@ public class RegistrationController
 	
 	@Autowired
 	private ProfessorService professorService;
+
+	private static final String EMAIL_REGEX = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
+
+	public static boolean isValidEmail(String email) {
+		Pattern pattern = Pattern.compile(EMAIL_REGEX);
+		Matcher matcher = pattern.matcher(email);
+		return matcher.matches();
+	}
 	
 	@PostMapping("/registeruser")
 	@CrossOrigin(origins = "http://localhost:4200")
-	public User registerUser(@RequestBody User user) throws Exception
-	{
+	public ResponseEntity<?> registerUser(@RequestBody User user) throws Exception {
 		String currEmail = user.getEmail();
 		String newID = getNewID();
 		user.setUserid(newID);
-		
-		if(currEmail != null || !"".equals(currEmail))
-		{
-			User userObj = userService.fetchUserByEmail(currEmail);
-			if(userObj != null)
-			{
-				throw new Exception("User with "+currEmail+" already exists !!!");
-			}
+
+
+		if (isValidEmail(user.getEmail()) == false) {
+			return new ResponseEntity<>("enter valid userId", HttpStatus.BAD_REQUEST);
 		}
-		User userObj = null;
-		userObj = userService.saveUser(user);
-		return userObj;
-	}
+			if (currEmail != null || !"".equals(currEmail)) {
+				User userObj = userService.fetchUserByEmail(currEmail);
+				if (userObj != null) {
+					throw new Exception("User with " + currEmail + " already exists !!!");
+				}
+			}
+			User userObj = null;
+			userObj = userService.saveUser(user);
+		return new ResponseEntity<>(userObj, HttpStatus.CREATED);
+		}
+
 	
 	@PostMapping("/registerprofessor")
 	@CrossOrigin(origins = "http://localhost:4200")

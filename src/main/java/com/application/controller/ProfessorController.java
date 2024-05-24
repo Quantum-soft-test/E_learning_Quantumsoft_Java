@@ -145,6 +145,8 @@ public class ProfessorController
 		al.add("rejected");
 		return new ResponseEntity<List<String>>(al,HttpStatus.OK);
 	}
+
+
 	
 	@GetMapping("/professorprofileDetails/{email}")
 	@CrossOrigin(origins = "http://localhost:4200")
@@ -161,6 +163,14 @@ public class ProfessorController
 		Professor professorobj = professorService.updateProfessorProfile(professor);
 		return new ResponseEntity<Professor>(professorobj, HttpStatus.OK);
 	}
+
+	@GetMapping("/getloggedprofessorUsername/{email}")
+	@CrossOrigin(origins = "http://localhost:4200")
+	public ResponseEntity<?> getuser(@PathVariable String email) throws Exception {
+		Professor professors = professorService.fetchProfessorByEmail(email);
+		return new ResponseEntity<String>(professors.getProfessorname(), HttpStatus.OK);
+	}
+
 	
 	@GetMapping("/gettotalprofessors")
 	@CrossOrigin(origins = "http://localhost:4200")
