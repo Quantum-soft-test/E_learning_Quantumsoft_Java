@@ -12,6 +12,9 @@ import com.application.model.User;
 import com.application.services.ProfessorService;
 import com.application.services.UserService;
 
+import javax.crypto.Cipher;
+import javax.crypto.spec.SecretKeySpec;
+import java.util.Base64;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -23,6 +26,8 @@ public class RegistrationController
 	
 	@Autowired
 	private ProfessorService professorService;
+	private static final String key = "AESEncryptionKey"; // 128 bit key
+	private static final String transformation = "AES";
 
 	private static final String EMAIL_REGEX = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
 
@@ -31,6 +36,27 @@ public class RegistrationController
 		Matcher matcher = pattern.matcher(email);
 		return matcher.matches();
 	}
+
+	public static String encrypt(String plainText) throws Exception {
+		SecretKeySpec secretKeySpec = new SecretKeySpec(key.getBytes(), transformation);
+		Cipher cipher = Cipher.getInstance(transformation);
+		cipher.init(Cipher.ENCRYPT_MODE, secretKeySpec);
+		byte[] encryptedBytes = cipher.doFinal(plainText.getBytes());
+		return Base64.getEncoder().encodeToString(encryptedBytes);
+	}
+
+	public static String decrypt(String encryptedText) throws Exception {
+		try {
+			SecretKeySpec secretKeySpec = new SecretKeySpec(key.getBytes(), transformation);
+			Cipher cipher = Cipher.getInstance(transformation);
+			cipher.init(Cipher.DECRYPT_MODE, secretKeySpec);
+			byte[] decryptedBytes = cipher.doFinal(Base64.getDecoder().decode(encryptedText));
+			return new String(decryptedBytes);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
 	
 	@PostMapping("/registeruser")
 	@CrossOrigin(origins = "http://localhost:4200")
@@ -38,6 +64,8 @@ public class RegistrationController
 		String currEmail = user.getEmail();
 		String newID = getNewID();
 		user.setUserid(newID);
+		String password=encrypt(user.getPassword());
+		user.setPassword(password);
 
 
 		if (isValidEmail(user.getEmail()) == false) {
