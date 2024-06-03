@@ -55,29 +55,29 @@ public class UserService
 		return (List<User>)userRepo.findProfileByEmail(email);
 	}
 
-	public TransactiobDetails createtransaction(Double amount){
-		try{
-			JSONObject jsonObject=new JSONObject();
-			jsonObject.put("amount",amount*100);
-			jsonObject.put("currency",CURRENCY);
-			RazorpayClient razorpayClient= new RazorpayClient(KEY,KEY_SECRET);
-			Order order=razorpayClient.orders.create(jsonObject);
-			System.out.println(order);
-			return prepareTransactiondetails(order);
-		}catch (Exception e){
-			System.out.println(e.getMessage());
+		public TransactiobDetails createtransaction(Double amount){
+			try{
+				JSONObject jsonObject=new JSONObject();
+				jsonObject.put("amount",amount*100);
+				jsonObject.put("currency",CURRENCY);
+				RazorpayClient razorpayClient= new RazorpayClient(KEY,KEY_SECRET);
+				Order order=razorpayClient.orders.create(jsonObject);
+				System.out.println(order);
+				return prepareTransactiondetails(order);
+			}catch (Exception e){
+				System.out.println(e.getMessage());
+			}
+			return null;
 		}
-		return null;
-	}
 
-	private TransactiobDetails prepareTransactiondetails(Order order){
-		String orderId=order.get(("id"));
-		String currency = order.get("currency");
-		Integer amount = order.get("amount");
-		TransactiobDetails transactiobDetails= new TransactiobDetails(orderId,currency,amount,KEY);
-		return transactiobDetails;
+		private TransactiobDetails prepareTransactiondetails(Order order){
+			String orderId=order.get(("id"));
+			String currency = order.get("currency");
+			Integer amount = order.get("amount");
+			TransactiobDetails transactiobDetails= new TransactiobDetails(orderId,currency,amount,KEY);
+			return transactiobDetails;
 
-	}
+		}
 
 
 }

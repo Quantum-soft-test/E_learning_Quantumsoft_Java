@@ -14,6 +14,8 @@ import com.application.services.UserService;
 @RestController
 public class LoginController 
 {
+
+	public static  final String ApiURL="http://localhost:4200";
 	@Autowired
 	private UserService userService;
 	
@@ -27,7 +29,7 @@ public class LoginController
     }
 	
 	@PostMapping("/loginuser")
-	@CrossOrigin(origins = "http://localhost:4200")
+	@CrossOrigin(origins = ApiURL)
 	public User loginUser(@RequestBody User user) throws Exception
 	{
 		String currEmail = user.getEmail();
@@ -49,7 +51,7 @@ public class LoginController
 	}
 	
 	@PostMapping("/loginprofessor")
-	@CrossOrigin(origins = "http://localhost:4200")
+	@CrossOrigin(origins = ApiURL)
 	public Professor loginDoctor(@RequestBody Professor professor) throws Exception
 	{
 		String currEmail = professor.getEmail();

@@ -59,7 +59,7 @@ public class RegistrationController
 	}
 	
 	@PostMapping("/registeruser")
-	@CrossOrigin(origins = "http://localhost:4200")
+	@CrossOrigin(origins = LoginController.ApiURL)
 	public ResponseEntity<?> registerUser(@RequestBody User user) throws Exception {
 		String currEmail = user.getEmail();
 		String newID = getNewID();
@@ -84,7 +84,7 @@ public class RegistrationController
 
 	
 	@PostMapping("/registerprofessor")
-	@CrossOrigin(origins = "http://localhost:4200")
+	@CrossOrigin(origins = LoginController.ApiURL)
 	public Professor registerDoctor(@RequestBody Professor professor) throws Exception
 	{
 		String currEmail = professor.getEmail();
